@@ -190,6 +190,9 @@ public class JpaJsonSearch<T> {
             jpqlAndParams.append(WHERE)
                 .append(rootFilter.buildJpql());
 
+        if (count)
+            return jpqlAndParams;
+
         if (sorts.size() > 0)
             jpqlAndParams.append(ORDER_BY);
 
