@@ -3,12 +3,12 @@ package it.mgt.uti.jpajsonsearch;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-public class JpaJsonSearchBuilder {
+public class JpaJsonSearchFactory {
 
     @PersistenceContext
     private EntityManager em;
 
-    public JpaJsonSearchBuilder() {
+    public JpaJsonSearchFactory() {
     }
 
     public <T> JpaJsonSearch<T> build(Class<T> type) {
