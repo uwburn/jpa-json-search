@@ -180,7 +180,7 @@ public class JpaJsonSearchFilterLogical extends JpaJsonSearchFilter {
         return addFilterCondition(name, JpaJsonSearchFilterCondition.Operator.GT, value);
     }
 
-    public JpaJsonSearchFilterLogical addFilterGreaterThanEqual(String name, Object value) {
+    public JpaJsonSearchFilterLogical greaterThanEqual(String name, Object value) {
         return addFilterCondition(name, JpaJsonSearchFilterCondition.Operator.GTE, value);
     }
 

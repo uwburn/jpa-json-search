@@ -40,6 +40,9 @@ public class JpaJsonSearchSort {
     }
 
     JpaJsonSearchJpqlAndParams buildJpql() {
+        if (parameter == null)
+            return new JpaJsonSearchJpqlAndParams();
+
         return new JpaJsonSearchJpqlAndParams(parameter.path)
                 .append(JpaJsonSearch.SPACE)
                 .append(order.jpql);
