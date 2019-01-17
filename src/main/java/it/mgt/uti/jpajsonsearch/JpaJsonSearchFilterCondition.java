@@ -110,6 +110,9 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
     JpaJsonSearchJpqlAndParams buildJpql() {
         logger.trace("Building JPQL");
 
+        if (parameter == null)
+            return new JpaJsonSearchJpqlAndParams();
+
         StringBuilder jpql = new StringBuilder();
 
         switch (operator) {
