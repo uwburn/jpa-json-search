@@ -32,7 +32,7 @@ public class JpaJsonSearchSort {
     };
 
     private JpaJsonSearch<?> search;
-    JpaJsonSearchParameter parameter;
+    private JpaJsonSearchParameter parameter;
     private Order order;
 
     public JpaJsonSearchSort(JpaJsonSearch<?> search) {
@@ -40,9 +40,6 @@ public class JpaJsonSearchSort {
     }
 
     JpaJsonSearchJpqlAndParams buildJpql() {
-        if (parameter == null)
-            return new JpaJsonSearchJpqlAndParams();
-
         return new JpaJsonSearchJpqlAndParams(parameter.path)
                 .append(JpaJsonSearch.SPACE)
                 .append(order.jpql);
@@ -55,6 +52,9 @@ public class JpaJsonSearchSort {
         Map.Entry<String, JsonNode> child = jsonNode.fields().next();
 
         parameter = search.parametersMap.get(child.getKey());
+        if (parameter == null)
+            throw new JpaJsonSearchException("Parameter " + child.getKey() + " not found");
+
         order = Order.parse(child.getValue().textValue());
 
         return this;
