@@ -92,6 +92,9 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
         this.search = search;
         this.name = name;
         this.parameter = search.parametersMap.get(name);
+
+        if (this.parameter == null)
+            throw new JpaJsonSearchException("Parameter " + name + " not found");
     }
 
     JpaJsonSearchFilterCondition(JpaJsonSearch<?> search, String name, Operator operator) {
@@ -109,9 +112,6 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
     @Override
     JpaJsonSearchJpqlAndParams buildJpql() {
         logger.trace("Building JPQL");
-
-        if (parameter == null)
-            return new JpaJsonSearchJpqlAndParams();
 
         StringBuilder jpql = new StringBuilder();
 
