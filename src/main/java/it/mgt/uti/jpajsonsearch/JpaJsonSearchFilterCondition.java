@@ -33,8 +33,8 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
         NOT_LIKE(" NOT LIKE "),
         LIKE_WILDCARD(" LIKE "),
         NOT_LIKE_WILDCARD(" NOT LIKE "),
-        NULL("IS NULL"),
-        NOT_NULL("IS NOT NULL");
+        NULL(" IS NULL"),
+        NOT_NULL(" IS NOT NULL");
 
         final String jpql;
 
