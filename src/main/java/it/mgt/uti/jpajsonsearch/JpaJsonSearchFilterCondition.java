@@ -19,27 +19,29 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
 
     enum Operator {
 
-        EQ(" = "),
-        NEQ(" <> "),
-        GT(" > "),
-        GTE(" >= "),
-        LT(" < "),
-        LTE(" <= "),
-        BETWEEN(" BETWEEN "),
-        NOT_BETWEEN(" NOT_BETWEEN "),
-        IN(" IN "),
-        NOT_IN(" NOT IN "),
-        LIKE(" LIKE "),
-        NOT_LIKE(" NOT LIKE "),
-        LIKE_WILDCARD(" LIKE "),
-        NOT_LIKE_WILDCARD(" NOT LIKE "),
-        NULL(" IS NULL"),
-        NOT_NULL(" IS NOT NULL");
+        EQ(" = ", true),
+        NEQ(" <> ", true),
+        GT(" > ", true),
+        GTE(" >= ", true),
+        LT(" < ", true),
+        LTE(" <= ", true),
+        BETWEEN(" BETWEEN ", true),
+        NOT_BETWEEN(" NOT_BETWEEN ", true),
+        IN(" IN ", true),
+        NOT_IN(" NOT IN ", true),
+        LIKE(" LIKE ", true),
+        NOT_LIKE(" NOT LIKE ", true),
+        LIKE_WILDCARD(" LIKE ", true),
+        NOT_LIKE_WILDCARD(" NOT LIKE ", true),
+        NULL(" IS NULL", false),
+        NOT_NULL(" IS NOT NULL", false);
 
         final String jpql;
+        final boolean hasValue;
 
-        Operator(String jpql) {
+        Operator(String jpql, boolean hasValue) {
             this.jpql = jpql;
+            this.hasValue = hasValue;
         }
 
         static public Operator parse(String placeholder) {
@@ -177,20 +179,31 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
     JpaJsonSearchFilter parse(JsonNode jsonNode) {
         logger.trace("Parsing condition filter");
 
-        if (jsonNode.size() != 1)
-            throw new JpaJsonSearchException("Expected condition filter element to have a single child");
+        if (jsonNode.size() == 0) {
+            operator = Operator.parse(jsonNode.asText());
 
-        Map.Entry<String, JsonNode> child = jsonNode.fields().next();
+            if (operator.hasValue)
+                throw new JpaJsonSearchException("Provided operator requires a value");
+        }
+        else if (jsonNode.size() == 1) {
+            Map.Entry<String, JsonNode> child = jsonNode.fields().next();
 
-        operator = Operator.parse(child.getKey());
-        if (child.getValue().isArray()) {
-            ArrayNode arrayNode = (ArrayNode) child.getValue();
-            value = StreamSupport.stream(arrayNode.spliterator(), false)
-                    .map(jn ->  parseParam(jn.asText(), parameter.type))
-                    .collect(Collectors.toList());
+            operator = Operator.parse(child.getKey());
+            if (child.getValue().isArray()) {
+                ArrayNode arrayNode = (ArrayNode) child.getValue();
+                value = StreamSupport.stream(arrayNode.spliterator(), false)
+                        .map(jn ->  parseParam(jn.asText(), parameter.type))
+                        .collect(Collectors.toList());
+            }
+            else {
+                value = parseParam(child.getValue().asText(), parameter.type);
+            }
+
+            if (!operator.hasValue)
+                throw new JpaJsonSearchException("Provided operator doesn't support a value");
         }
         else {
-            value = parseParam(child.getValue().asText(), parameter.type);
+            throw new JpaJsonSearchException("Expected condition filter element to have a single child");
         }
 
         if ((operator == Operator.LIKE_WILDCARD || operator == Operator.NOT_LIKE_WILDCARD) && value instanceof String)
