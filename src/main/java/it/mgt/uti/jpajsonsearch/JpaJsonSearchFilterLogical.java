@@ -152,7 +152,7 @@ public class JpaJsonSearchFilterLogical<T> extends JpaJsonSearchFilter<T> {
     }
 
     public JpaJsonSearchFilterLogical or() {
-        JpaJsonSearchFilterLogical filter = new JpaJsonSearchFilterLogical<>(this.search, this, Conjunction.AND);
+        JpaJsonSearchFilterLogical filter = new JpaJsonSearchFilterLogical<>(this.search, this, Conjunction.OR);
         filters.add(filter);
         return filter;
     }
