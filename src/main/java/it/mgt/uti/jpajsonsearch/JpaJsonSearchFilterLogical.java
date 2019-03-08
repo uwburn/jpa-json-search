@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class JpaJsonSearchFilterLogical extends JpaJsonSearchFilter {
+public class JpaJsonSearchFilterLogical<T> extends JpaJsonSearchFilter<T> {
 
     private final static Logger logger = LoggerFactory.getLogger(JpaJsonSearchFilter.class);
 
@@ -40,11 +40,10 @@ public class JpaJsonSearchFilterLogical extends JpaJsonSearchFilter {
     };
 
     private Conjunction conjunction;
-    private JpaJsonSearch<?> search;
     private List<JpaJsonSearchFilter> filters = new ArrayList<>();
 
-    JpaJsonSearchFilterLogical(JpaJsonSearch<?> search, Conjunction conjunction) {
-        this.search = search;
+    JpaJsonSearchFilterLogical(JpaJsonSearch<T> search, JpaJsonSearchFilterLogical container, Conjunction conjunction) {
+        super(search, container);
         this.conjunction = conjunction;
     }
 
@@ -106,7 +105,7 @@ public class JpaJsonSearchFilterLogical extends JpaJsonSearchFilter {
                     or().parse(child.getValue());
                     break;
                 default:
-                    filters.add(new JpaJsonSearchFilterCondition(search, child.getKey()).parse(child.getValue()));
+                    filters.add(new JpaJsonSearchFilterCondition<>(search, this, child.getKey()).parse(child.getValue()));
                     break;
             }
         }
@@ -147,24 +146,24 @@ public class JpaJsonSearchFilterLogical extends JpaJsonSearchFilter {
     }
 
     public JpaJsonSearchFilterLogical and() {
-        JpaJsonSearchFilterLogical filter = new JpaJsonSearchFilterLogical(this.search, Conjunction.AND);
+        JpaJsonSearchFilterLogical filter = new JpaJsonSearchFilterLogical<>(this.search, this, Conjunction.AND);
         filters.add(filter);
         return filter;
     }
 
     public JpaJsonSearchFilterLogical or() {
-        JpaJsonSearchFilterLogical filter = new JpaJsonSearchFilterLogical(this.search, Conjunction.AND);
+        JpaJsonSearchFilterLogical filter = new JpaJsonSearchFilterLogical<>(this.search, this, Conjunction.AND);
         filters.add(filter);
         return filter;
     }
 
     private JpaJsonSearchFilterLogical addFilterCondition(String name, JpaJsonSearchFilterCondition.Operator operator, Object value) {
-        filters.add(new JpaJsonSearchFilterCondition(search, name, operator, value));
+        filters.add(new JpaJsonSearchFilterCondition<>(search, this, name, operator, value));
         return this;
     }
 
     private JpaJsonSearchFilterLogical addFilterCondition(String name, JpaJsonSearchFilterCondition.Operator operator) {
-        filters.add(new JpaJsonSearchFilterCondition(search, name, operator));
+        filters.add(new JpaJsonSearchFilterCondition<>(search, this, name, operator));
         return this;
     }
 

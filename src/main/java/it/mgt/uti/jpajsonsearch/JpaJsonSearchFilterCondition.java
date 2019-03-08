@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
+public class JpaJsonSearchFilterCondition<T> extends JpaJsonSearchFilter<T> {
 
     private final static Logger logger = LoggerFactory.getLogger(JpaJsonSearchFilterCondition.class);
 
@@ -84,14 +84,13 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
         }
     }
 
-    private JpaJsonSearch<?> search;
     private String name;
     private Operator operator;
     private JpaJsonSearchParameter parameter;
     private Object value;
 
-    JpaJsonSearchFilterCondition(JpaJsonSearch<?> search, String name) {
-        this.search = search;
+    JpaJsonSearchFilterCondition(JpaJsonSearch<T> search, JpaJsonSearchFilterLogical container, String name) {
+        super(search, container);
         this.name = name;
         this.parameter = search.parametersMap.get(name);
 
@@ -99,14 +98,14 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
             throw new JpaJsonSearchException("Parameter " + name + " not found");
     }
 
-    JpaJsonSearchFilterCondition(JpaJsonSearch<?> search, String name, Operator operator) {
-        this(search, name);
+    JpaJsonSearchFilterCondition(JpaJsonSearch<T> search, JpaJsonSearchFilterLogical container, String name, Operator operator) {
+        this(search, container, name);
 
         this.operator = operator;
     }
 
-    JpaJsonSearchFilterCondition(JpaJsonSearch<?> search, String name, Operator operator, Object value) {
-        this(search, name, operator);
+    JpaJsonSearchFilterCondition(JpaJsonSearch<T> search, JpaJsonSearchFilterLogical container, String name, Operator operator, Object value) {
+        this(search, container, name, operator);
 
         this.value = value;
     }
@@ -158,13 +157,13 @@ public class JpaJsonSearchFilterCondition extends JpaJsonSearchFilter {
         }
     }
 
-    private <T> Object parseParam(String value, Class<T> type) {
+    private <V> Object parseParam(String value, Class<V> type) {
         logger.trace("Parsing parameter");
 
         if (JpaUtils.getAnnotation(type, Entity.class) != null) {
             Class<?> idType = JpaUtils.getIdClass(type);
             Object id = JpaUtils.parseParam(value, idType);
-            T entity = search.em.find(type, id);
+            V entity = search.em.find(type, id);
             if (entity == null)
                 throw new JpaJsonSearchException("Reference error");
 

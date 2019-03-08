@@ -38,7 +38,7 @@ public class JpaJsonSearch<T> {
     private int pageSize = 10;
 
     Map<String, JpaJsonSearchParameter> parametersMap = new HashMap<>();
-    private JpaJsonSearchFilterLogical rootFilter = new JpaJsonSearchFilterLogical(this, JpaJsonSearchFilterLogical.Conjunction.AND);
+    private JpaJsonSearchFilterLogical<T> rootFilter = new JpaJsonSearchFilterLogical<>(this, null, JpaJsonSearchFilterLogical.Conjunction.AND);
     private List<JpaJsonSearchSort> sorts = new ArrayList<>();
     private Set<String> parameterNames = new HashSet<>();
 
