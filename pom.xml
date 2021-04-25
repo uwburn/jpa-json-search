@@ -10,7 +10,7 @@
 
     <groupId>it.mgt.util</groupId>
     <artifactId>jpa-json-search</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +24,13 @@
         <hsqldb.version>2.4.0</hsqldb.version>
         <c3p0.version>0.9.5.4</c3p0.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>uwburn-public</id>
+            <url>https://public:&#103;hp_USiLfE56hyJwBouilQKlVd78RViQxq3eXDiW@maven.pkg.github.com/uwburn/*</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!-- Michele -->
@@ -60,7 +67,7 @@
         <dependency>
             <groupId>it.mgt.util</groupId>
             <artifactId>hibernate</artifactId>
-            <version>1.1.2</version>
+            <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

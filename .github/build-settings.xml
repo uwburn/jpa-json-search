@@ -1,0 +1,13 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <id>uwburn-public</id>
+            <username>public</username>
+            <!-- Public token with `read:packages` scope -->
+            <password>&#103;hp_USiLfE56hyJwBouilQKlVd78RViQxq3eXDiW</password>
+        </server>
+    </servers>
+</settings>
