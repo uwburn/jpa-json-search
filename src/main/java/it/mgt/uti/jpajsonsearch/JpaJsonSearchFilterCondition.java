@@ -86,6 +86,7 @@ public class JpaJsonSearchFilterCondition<T> extends JpaJsonSearchFilter<T> {
 
     private String name;
     private Operator operator;
+    private boolean omit = false;
     private JpaJsonSearchParameter parameter;
     private Object value;
 
@@ -113,6 +114,9 @@ public class JpaJsonSearchFilterCondition<T> extends JpaJsonSearchFilter<T> {
     @Override
     JpaJsonSearchJpqlAndParams buildJpql() {
         logger.trace("Building JPQL");
+
+        if (omit)
+            return new JpaJsonSearchJpqlAndParams();
 
         StringBuilder jpql = new StringBuilder();
 
@@ -188,6 +192,12 @@ public class JpaJsonSearchFilterCondition<T> extends JpaJsonSearchFilter<T> {
             Map.Entry<String, JsonNode> child = jsonNode.fields().next();
 
             operator = Operator.parse(child.getKey());
+
+            if (child.getValue().isNull()) {
+                this.omit = true;
+                return this;
+            }
+
             if (child.getValue().isArray()) {
                 ArrayNode arrayNode = (ArrayNode) child.getValue();
                 value = StreamSupport.stream(arrayNode.spliterator(), false)

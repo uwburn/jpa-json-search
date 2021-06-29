@@ -50,4 +50,8 @@ public class JpaJsonSearchJpqlAndParams {
         return this;
     }
 
+    boolean isEmpty() {
+        return this.jpql.length() == 0 && this.params.size() == 0;
+    }
+
 }

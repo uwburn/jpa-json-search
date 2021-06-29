@@ -60,12 +60,17 @@ public class JpaJsonSearchFilterLogical<T> extends JpaJsonSearchFilter<T> {
 
         boolean first = true;
         for (JpaJsonSearchFilter filter : filters) {
+            JpaJsonSearchJpqlAndParams filterJpqlAndParams = filter.buildJpql();
+
+            if (filterJpqlAndParams.isEmpty())
+                continue;
+
             if (first)
                 first = false;
             else
                 jpqlAndParams.append(conjunction.jpql);
 
-            jpqlAndParams.append(filter.buildJpql());
+            jpqlAndParams.append(filterJpqlAndParams);
         }
 
         jpqlAndParams.append(JpaJsonSearch.CLOSE_PARENTHESIS);
