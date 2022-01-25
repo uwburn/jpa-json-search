@@ -220,7 +220,7 @@ public class JpaJsonSearch<T> {
         for (Map.Entry<String, Object> e : jpqlAndParams.params.entrySet())
             query.setParameter(e.getKey(), e.getValue());
 
-        if (!count) {
+        if (!count & (page >= 0 && pageSize >= 0)) {
             query.setMaxResults(pageSize);
             query.setFirstResult(page * pageSize);
         }
