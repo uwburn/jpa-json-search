@@ -36,7 +36,7 @@ public class JpaJsonSearchResult<T> {
         return (int) Math.round(Math.ceil(count.doubleValue() / pageSize));
     }
 
-    public <V> List<V> transform(JpaJsonSearchResultTransformer<T> transformer) {
-        return transformer.transform(values);
+    public <V> JpaJsonSearchResult<V> transform(JpaJsonSearchResultTransformer<T, V> transformer) {
+        return new JpaJsonSearchResult<>(transformer.transform(values), count, page, pageSize);
     }
 }
