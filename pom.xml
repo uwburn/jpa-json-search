@@ -10,7 +10,7 @@
 
     <groupId>it.mgt.util</groupId>
     <artifactId>jpa-json-search</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.8</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,16 +27,24 @@
 
     <repositories>
         <repository>
-            <id>uwburn-public</id>
-            <url>https://public:&#103;hp_USiLfE56hyJwBouilQKlVd78RViQxq3eXDiW@maven.pkg.github.com/uwburn/*</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/uwburn/jpa-json-search</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <!-- Michele -->
         <dependency>
-            <groupId>it.mgt.util</groupId>
-            <artifactId>jpa</artifactId>
+            <groupId>com.github.uwburn</groupId>
+            <artifactId>jpa-util</artifactId>
             <version>1.0.4</version>
         </dependency>
         <!-- Java Inject API -->
@@ -65,8 +73,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>it.mgt.util</groupId>
-            <artifactId>hibernate</artifactId>
+            <groupId>com.github.uwburn</groupId>
+            <artifactId>hibernate-util</artifactId>
             <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
@@ -119,14 +127,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/uwburn/jpa-json-search</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
